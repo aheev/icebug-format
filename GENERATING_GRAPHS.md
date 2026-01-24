@@ -28,7 +28,7 @@ This will generate five outputs:
 - `{prefix}.duckdb` - DuckDB database with nodes and edges tables
 - `{prefix}.snap` - SNAP format (edge list)
 - `{prefix}.snap.bin` - SNAP binary format (efficient binary format)
-- `{prefix}_kuzu` - KuzuDB database with nodes and edges tables
+- `{prefix}.lbdb` - LadybugDB database with nodes and edges tables
 
 Example for Karate Club graph:
 ```bash
@@ -69,8 +69,8 @@ A binary file with the SNAP binary format:
 - Stores nodes and edges in a compact binary format
 - Supports optional node and edge attributes
 
-### KuzuDB
-A KuzuDB database with two tables:
+### LadybugDB
+A LadybugDB database with two tables:
 - `nodes`: Contains node_id (INT64) and attributes (if any) with node_id as primary key
 - `edges`: A relationship table connecting nodes to nodes
 

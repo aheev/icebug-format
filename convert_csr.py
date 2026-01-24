@@ -87,7 +87,7 @@ def get_node_and_edge_tables(
 
 
 def duckdb_type_to_cypher_type(duckdb_type: str) -> str:
-    """Convert DuckDB column type to Cypher/Kuzu type."""
+    """Convert DuckDB column type to Cypher/Ladybug type."""
     duckdb_type = duckdb_type.upper()
     type_map = {
         "BIGINT": "INT64",

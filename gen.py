@@ -5,7 +5,7 @@ Script to dump the Karate Club graph from NetworkX to various formats:
 - DuckDB (nodes and edges in separate tables)
 - SNAP (simple edge list format)
 - SNAP Binary (efficient binary format)
-- KuzuDB (nodes and edges in separate tables)
+- LadybugDB (nodes and edges in separate tables)
 
 This script also supports randomizing node IDs in a space that's 10x the size of
 the number of nodes in the graph.
@@ -15,9 +15,9 @@ import argparse
 import networkx as nx
 import csv
 import duckdb
-import kuzu
 import pandas as pd
 import random
+import real_ladybug as lb
 from snap_binary import export_networkx_to_snap
 
 
@@ -174,11 +174,11 @@ def export_to_snap_binary(graph, filename="karate.snap.bin"):
     print(f"Graph exported to {filename}")
 
 
-def export_to_kuzudb(graph, db_name="karate_kuzu"):
-    """Export the graph to a KuzuDB database."""
-    # Create or open KuzuDB database
-    db = kuzu.Database(db_name)
-    conn = kuzu.Connection(db)
+def export_to_lbdb(graph, db_name="karate"):
+    """Export the graph to a LadybugDB database."""
+    # Create or open LadybugDB database
+    db = lb.Database(db_name)
+    conn = lb.Connection(db)
 
     # Check if the graph has club attribute
     has_club = any("club" in data for node, data in graph.nodes(data=True))
@@ -230,7 +230,7 @@ def export_to_kuzudb(graph, db_name="karate_kuzu"):
     # Use COPY to efficiently load edges from DataFrame
     conn.execute("COPY edges FROM edges_df")
 
-    print(f"Graph exported to KuzuDB database: {db_name}")
+    print(f"Graph exported to LadybugDB database: {db_name}")
 
 
 def main():
@@ -295,8 +295,8 @@ def main():
     print("Exporting to SNAP Binary...")
     export_to_snap_binary(graph, f"{prefix}.snap.bin")
 
-    print("Exporting to KuzuDB...")
-    export_to_kuzudb(graph, f"{prefix}_kuzu")
+    print("Exporting to LadybugDB...")
+    export_to_lbdb(graph, f"{prefix}.lbdb")
 
     print("All exports completed!")
 
