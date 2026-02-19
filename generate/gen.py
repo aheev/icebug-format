@@ -12,11 +12,12 @@ the number of nodes in the graph.
 """
 
 import argparse
-import networkx as nx
 import csv
-import duckdb
-import pandas as pd
 import random
+
+import duckdb
+import networkx as nx
+import pandas as pd
 import real_ladybug as lb
 from snap_binary import export_networkx_to_snap
 
@@ -128,14 +129,14 @@ def export_to_duckdb(graph, db_name="karate.duckdb"):
         nodes_data = [
             (node, data.get("club", "")) for node, data in graph.nodes(data=True)
         ]
-        nodes_df = pd.DataFrame(nodes_data, columns=["id", "club"])
+        pd.DataFrame(nodes_data, columns=["id", "club"])
     else:
         nodes_data = [(node,) for node in graph.nodes()]
-        nodes_df = pd.DataFrame(nodes_data, columns=["id"])
+        pd.DataFrame(nodes_data, columns=["id"])
 
     # Create edges dataframe
     edges_data = [(edge[0], edge[1]) for edge in graph.edges()]
-    edges_df = pd.DataFrame(edges_data, columns=["source", "target"])
+    pd.DataFrame(edges_data, columns=["source", "target"])
 
     # Drop tables if they exist
     conn.execute("DROP TABLE IF EXISTS nodes")
@@ -198,15 +199,13 @@ def export_to_lbdb(graph, db_name="karate"):
 
     # Create nodes table
     if has_club:
-        conn.execute(
-            "CREATE NODE TABLE nodes(id INT64, club STRING, PRIMARY KEY (id))"
-        )
+        conn.execute("CREATE NODE TABLE nodes(id INT64, club STRING, PRIMARY KEY (id))")
 
         # Create DataFrame for nodes
         nodes_data = [
             (node, data.get("club", "")) for node, data in graph.nodes(data=True)
         ]
-        nodes_df = pd.DataFrame(nodes_data, columns=["id", "club"])
+        pd.DataFrame(nodes_data, columns=["id", "club"])
 
         # Use COPY to efficiently load nodes from DataFrame
         conn.execute("COPY nodes FROM nodes_df")
@@ -215,7 +214,7 @@ def export_to_lbdb(graph, db_name="karate"):
 
         # Create DataFrame for nodes
         nodes_data = [(node,) for node in graph.nodes()]
-        nodes_df = pd.DataFrame(nodes_data, columns=["id"])
+        pd.DataFrame(nodes_data, columns=["id"])
 
         # Use COPY to efficiently load nodes from DataFrame
         conn.execute("COPY nodes FROM nodes_df")
@@ -225,7 +224,7 @@ def export_to_lbdb(graph, db_name="karate"):
 
     # Create DataFrame for edges
     edges_data = [(edge[0], edge[1]) for edge in graph.edges()]
-    edges_df = pd.DataFrame(edges_data, columns=["source", "target"])
+    pd.DataFrame(edges_data, columns=["source", "target"])
 
     # Use COPY to efficiently load edges from DataFrame
     conn.execute("COPY edges FROM edges_df")

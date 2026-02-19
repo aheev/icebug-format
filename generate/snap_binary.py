@@ -1,6 +1,6 @@
+import importlib
 import struct
-import os
-from typing import List, Tuple, Union, Dict, Any
+from typing import Any, Dict, List, Tuple
 
 
 class SNAPBinaryExporter:
@@ -188,7 +188,7 @@ def export_networkx_to_snap(G, filename: str) -> None:
         filename: Output filename
     """
     try:
-        import networkx as nx
+        importlib.util.find_spec("networkx")
     except ImportError:
         raise ImportError("NetworkX is required for this function")
 
