@@ -1,1 +1,2 @@
-CREATE REL TABLE edges(FROM nodes TO nodes) WITH (storage = '', format = 'icebug-disk');
+CREATE NODE TABLE nodes(id INT64, club STRING, PRIMARY KEY(id));
+CREATE REL TABLE edges(FROM nodes TO nodes);
