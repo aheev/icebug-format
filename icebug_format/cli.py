@@ -679,20 +679,18 @@ def main():
     parser.add_argument(
         "--source-db",
         type=str,
-        default="karate_random.duckdb",
-        help="Source DuckDB database path (default: karate_random.duckdb)",
+        required=True,
+        help="Source DuckDB database path",
     )
     parser.add_argument(
         "--output-db",
         type=str,
-        default="csr_graph.db",
-        help="Output DuckDB database path (default: csr_graph.db)",
+        help="Output DuckDB database path",
     )
     parser.add_argument(
         "--csr-table",
         type=str,
-        default="csr_graph",
-        help="Table name prefix for CSR data (default: csr_graph)",
+        help="Table name prefix for CSR data",
     )
     parser.add_argument(
         "--node-table",
@@ -746,6 +744,13 @@ def main():
     )
 
     args = parser.parse_args()
+
+    # Infer --output-db and --csr-table from --source-db stem when not provided
+    source_stem = Path(args.source_db).stem
+    if args.output_db is None:
+        args.output_db = str(Path(args.source_db).parent / f"{source_stem}_csr.duckdb")
+    if args.csr_table is None:
+        args.csr_table = source_stem
 
     if args.graphar:
         print("=== GraphAr to CSR Format Converter ===\n")
